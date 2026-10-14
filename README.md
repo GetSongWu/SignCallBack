@@ -1,3 +1,5 @@
+
+重要：由于系统版本的差别部分系统偏移需要自己手动替换！如果可以也可以自己写一个符号解析工具供驱动使用！
 基于ARK方式的内核回调摘除
 ACE-BOOT.sys会在系统注册：
 0xFFFFF8012F422940	ProcessObCallback PRE	C:\Program Files\AntiCheatExpert\ACE-BOOT.sys	ANTICHEATEXPERT.COM	1.0.2606.17242	0xFFFFC802E66D0EB0	ACE-BOOT64 NT Driver
