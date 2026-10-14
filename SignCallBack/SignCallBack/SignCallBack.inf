@@ -1,0 +1,53 @@
+;
+; SignCallBack.inf  —— 禁用 ACE-BOOT.sys 内核回调
+;
+; 启动类型: 设为 0 (SERVICE_BOOT_START) 时能在 ACE 之前加载,
+;           走 PATH-C 注册期拦截, 效果最好.
+;           设为 1 (SERVICE_SYSTEM_START) 或 2 则只能走 PATH-A/B.
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4D36E97D-E325-11CE-BFC1-08002BE10318}
+Provider=%ManufacturerName%
+DriverVer=
+CatalogFile=SignCallBack.cat
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+SignCallBack.sys=1
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$.10.0...16299
+
+[Standard.NT$ARCH$.10.0...16299]
+SignCallBack.ServiceInstall=SignCallBack.Install, SignCallBack
+
+[SignCallBack.Install]
+CopyFiles=SignCallBack.CopyFiles
+
+[SignCallBack.CopyFiles]
+SignCallBack.sys,,,0x00000010
+
+[SignCallBack.ServiceInstall]
+AddService=SignCallBack,0x00000002,SignCallBack.Service.Add
+
+[SignCallBack.Service.Add]
+DisplayName    = %ServiceName%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 0                  ; SERVICE_BOOT_START (早于 ACE 加载)
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\SignCallBack.sys
+LoadOrderGroup = Event Log
+
+[Strings]
+ManufacturerName="SignCallBack"
+ServiceName="SignCallBack - ACE Callback Neutralizer"
+DiskName="SignCallBack Source Disk"
